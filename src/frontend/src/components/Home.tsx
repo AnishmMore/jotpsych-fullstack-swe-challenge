@@ -1,41 +1,50 @@
-import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Box, Button, Container, Typography } from '@mui/material';
 
 function Home() {
-  const [username, setUsername] = useState<string>("");
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchUser = async () => {
-      // get access token
-
-      if (token) {
-        const response = await fetch("http://localhost:3002/user", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        const data = await response.json();
-        if (response.ok) {
-          setUsername(data.username);
-        }
-      }
-    };
-
-    fetchUser();
-  }, []);
+    const token = localStorage.getItem('access_token');
+    if (token) {
+      navigate('/profile');
+    }
+  }, [navigate]);
 
   return (
-    <div>
-      <h2>Home</h2>
-      {username ? (
-        <p>Welcome, {username}!</p>
-      ) : (
-        <p>
-          Please <Link to="/login">login</Link> or{" "}
-          <Link to="/register">register</Link>.
-        </p>
-      )}
-    </div>
+    <Container maxWidth="xs">
+      <Box
+        display="flex"
+        flexDirection="column"
+        alignItems="center"
+        justifyContent="center"
+        minHeight="100vh"
+      >
+        <Typography variant="h4" gutterBottom>
+          Welcome
+        </Typography>
+        <Box mt={2}>
+          <Button
+            variant="contained"
+            color="primary"
+            fullWidth
+            onClick={() => navigate('/login')}
+            sx={{ mb: 2 }}
+          >
+            Login
+          </Button>
+          <Button
+            variant="contained"
+            color="secondary"
+            fullWidth
+            onClick={() => navigate('/register')}
+          >
+            Register
+          </Button>
+        </Box>
+      </Box>
+    </Container>
   );
 }
 
