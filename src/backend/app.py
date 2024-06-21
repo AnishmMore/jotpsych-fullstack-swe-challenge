@@ -25,10 +25,9 @@ def create_app():
     app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'secret123')
     app.config['JWT_SECRET_KEY'] = os.environ.get('JWT_SECRET_KEY', 'secret1234')
     app.config['SESSION_TYPE'] = 'filesystem'
-    app.config['CORS_HEADERS'] = 'Content-Type,Authorization,app-version'
 
     # Correct CORS configuration
-    CORS(app, resources={r"/*": {"origins": "*"}})
+    CORS(app, resources={r"/*": {"origins": "http://localhost:5173"}}, supports_credentials=True)
 
     db.init_app(app)
     migrate.init_app(app, db)
@@ -50,9 +49,10 @@ def create_app():
 
     @app.after_request
     def after_request(response):
-        response.headers.add('Access-Control-Allow-Origin', '*')
+        response.headers.add('Access-Control-Allow-Origin', 'http://localhost:5173')
         response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization,app-version')
         response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
+        response.headers.add('Access-Control-Allow-Credentials', 'true')
         return response
 
     @app.route('/')

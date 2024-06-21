@@ -6,7 +6,7 @@ class APIService {
 
   private constructor() {
     this.baseUrl = 'http://localhost:3002';
-    this.appVersion = '1.1.9'; // Starting version for testing update
+    this.appVersion = '1.2.1'; // Starting version for testing update
     this.token = null;
   }
 
@@ -39,7 +39,7 @@ class APIService {
       method,
       headers,
       body: body ? JSON.stringify(body) : null,
-      credentials: 'include',
+      credentials: 'include',  // Include credentials in the request
     };
 
     try {
